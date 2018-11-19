@@ -9,8 +9,11 @@
 /* eslint-disable no-undef */
 
 import FootGuide from './components/FootGuide/FootGuide.vue'
-
+//import {reqAddress} from './api'
 export default {
+  mounted(){
+   this.$store.dispatch('getAddress')
+  },
   components: {
     FootGuide
   }
