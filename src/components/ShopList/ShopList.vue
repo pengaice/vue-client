@@ -13,6 +13,7 @@
                 <li class="supports">保</li>
                 <li class="supports">准</li>
                 <li class="supports">票</li>
+                
               </ul>
             </section>
             <section class="shop_rating_order">
