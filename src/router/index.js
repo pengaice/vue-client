@@ -49,6 +49,17 @@ export default new VueRouter({
       path: '/login',
       component: Login
     },
+    // {
+    //   path: '/shop',
+    //   component: shop,
+    //   children:[
+    //     {
+    //       path: '/shop/',
+    //       component: shop,
+    //     }
+    //
+    //   ]
+    // },
     {
       path: '/',
       redirect: '/msite'
