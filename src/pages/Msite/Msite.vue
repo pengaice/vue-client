@@ -38,9 +38,9 @@
     </section>
 </template>
 <script>
-  import {mapState} from 'vuex'
-  import Swiper from 'swiper'
-  import 'swiper/dist/css/swiper.min.css'
+import {mapState} from 'vuex'
+import Swiper from 'swiper'
+import 'swiper/dist/css/swiper.min.css'
 import ShopList from '../../components/ShopList/ShopList.vue'
 export default{
   mounted () {
