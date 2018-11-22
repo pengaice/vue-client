@@ -6,7 +6,7 @@
         <ul ref="leftUI">
           <li class="menu-item"
                v-for="(good,index) in goods"
-               :key="index"
+              :key="index"
                :class="{current:index===currentIndex}"
                 @click="clickItem(index)">
             <span class="text bottom-border-1px">
@@ -16,7 +16,6 @@
           </li>
         </ul>
       </div>
-
       <div class="foods-wrapper">
         <ul ref="rightUI">
           <li class="food-list-hook" v-for="(good,index) in goods" :key="index">
@@ -54,7 +53,7 @@
   export default{
      data(){
        return{
-         scrolly:0,
+         scrollY:0,
          tops:[],
        }
      },
@@ -62,6 +61,7 @@
         this.$store.dispatch('getShopGoods',()=>{
           this.$nextTick(()=>{
             this._initScroll()
+            this._initTops()
           })
         })
 //
@@ -69,15 +69,61 @@
     computed:{
       ...mapState(['goods']),
       currentIndex(){
+        const {scrollY,tops} = this
+        const index = tops.findIndex((top,index)=>{
+          //scrollY>=当前top 小于下一个top
+          return scrollY>top && scrollY<tops[index+1]
+         })
+
+        // 如果下标变化了
+        if(this.index!==index && this.leftScroll) {
+          this.index = index
+          // 将index对应的左侧li滚动到最上面(尽量)
+          const li = this.$refs.leftUI.children[index]
+          this.leftScroll.scrollToElement(li, 300)
+        }
+        return index
 
       }
     },
     methods:{
+//      初始化滚动对象
       _initScroll(){
-        new BScroll('./menu-wrapper',{
-
+        this.leftScroll = new BScroll('.menu-wrapper',{
+         click : true
         })
+         this.rightScroll = new BScroll('.foods-wrapper',{
+           probeType:1,
+           click:true
+          })
+        //绑定scroll事件监听
+        this.rightScroll.on('scroll',({x,y})=>{
+             this.scrollY = Math.abs(y)
+        })
+
+        // 绑定滚动结束的监听
+        this.rightScroll.on('scrollEnd', ({x, y}) => {
+          this.scrollY = Math.abs(y)
+        })
+      },
+//      初始化tops
+      _initTops(){
+        const tops = []
+        let top = 0
+        tops.push(top)
+         const lis = this.$refs.rightUI.getElementsByClassName('food-list-hook')
+         Array.prototype.slice.call(lis).forEach(li=>{
+                top+=li.clientHeight
+                tops.push(top)
+           })
+        this.tops = tops
+      },
+      clickItem(index){
+        const y = -this.tops[index]
+        this.scrollY = -y
+        this.rightScroll.scrollTo(0,y,500)
       }
+
     }
   }
 </script>
